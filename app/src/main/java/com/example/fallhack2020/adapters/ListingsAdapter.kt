@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fallhack2020.ItemDetailDialog
 import com.example.fallhack2020.ItemDetailsActivity
 import com.example.fallhack2020.R
 import com.example.fallhack2020.data.Item
@@ -40,13 +41,9 @@ class ListingsAdapter(private val list:List<Item>) : RecyclerView.Adapter<Listin
             itemView.setOnClickListener {
                 val position: Int = adapterPosition
                 val context = itemView.context
-                val intent = Intent(context, ItemDetailsActivity::class.java).apply {
-                    putExtra("NUMBER", position)
-                    putExtra("CODE", itemName.text)
-                    putExtra("CATEGORY", itemDescription.text)
-                    putExtra("CONTENT", itemPrice.text)
-                }
-                context.startActivity(intent)
+                val customDialog = ItemDetailDialog(context,list[position])
+                customDialog.show()
+
             }
         }
     }
