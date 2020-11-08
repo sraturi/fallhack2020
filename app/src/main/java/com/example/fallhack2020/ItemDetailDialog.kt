@@ -23,7 +23,8 @@ class ItemDetailDialog(context: Context, val item:Item) : Dialog(context) {
         findViewById<TextView>(R.id.priceT).text = "$${item.price}/month"
 
         findViewById<Button>(R.id.rentB).setOnClickListener(View.OnClickListener {
-            Toast.makeText(context, "Coming Soon!!",Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Your item is on the way.",Toast.LENGTH_LONG).show()
+            cancel()
         })
         findViewById<ImageButton>(R.id.backbutton).setOnClickListener(View.OnClickListener {
             cancel()
