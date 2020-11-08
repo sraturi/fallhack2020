@@ -1,4 +1,4 @@
-package com.example.fallhack2020
+package com.example.fallhack2020.adapters
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -16,9 +16,9 @@ class ViewPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activ
 
     override fun createFragment(position: Int): Fragment {
         return when(position) {
-            1 -> HomeFragment()
-            2 -> MyInventoryFragment()
-            3 -> MyProfileFragment()
+            0 -> HomeFragment()
+            1 -> MyInventoryFragment()
+            2 -> MyProfileFragment()
             else -> HomeFragment()
         }
     }
