@@ -1,45 +1,48 @@
 package com.example.fallhack2020
 
-import android.app.DatePickerDialog
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.TextView
 import com.example.fallhack2020.model.SignUpForm
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import org.w3c.dom.Text
-import kotlin.math.sign
 
 class SignUpActivity : AppCompatActivity() {
 
     private var signUpForm = SignUpForm()
     private lateinit var password: EditText
+    private lateinit var confirmPassword: EditText
     private lateinit var emailAddress: EditText
-    private lateinit var firstName:EditText
-    private lateinit var lastName:EditText
-    private lateinit var phoneNum:EditText
     private lateinit var errorText: TextView
-    private lateinit var dobText: TextView
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
+        //checkIfWeAreLoggedIn()
         setupEditTexts()
+        supportActionBar?.hide()
         auth = Firebase.auth
         findViewById<Button>(R.id.signupButton).setOnClickListener {
             signUp()
         }
 
+    }
+
+    private fun checkIfWeAreLoggedIn() {
+        val user = Firebase.auth.currentUser
+        if (user != null) {
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
     }
 
     private fun signUp() {
@@ -48,12 +51,9 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun verifyInputs() {
-        signUpForm.firstName = firstName.text.toString()
-        signUpForm.lastName = lastName.text.toString()
-        signUpForm.phoneNumber = phoneNum.text.toString()
         signUpForm.email = emailAddress.text.toString()
         signUpForm.password = password.text.toString()
-
+        signUpForm.confirmPassword = confirmPassword.text.toString()
         if (signUpForm.isEverythingFilled()) {
             errorText.visibility = View.GONE
             setupFirebaseAuth()
@@ -64,12 +64,12 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setupFirebaseAuth() {
-        Log.d("bugg","asking to create auth")
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("Signing up")
+        progressDialog.show()
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(signUpForm.email,signUpForm.password).addOnCompleteListener(this) {task ->
-            Log.d("bugg","create user task is progressed"+ task)
 
             if (task.isSuccessful) {
-                Log.d("bugg","create user task is successfull")
                 val user = auth.currentUser
                 user?.sendEmailVerification()
                 val database = Firebase.database
@@ -85,21 +85,19 @@ class SignUpActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                Log.d("bugg","create user task is fked up")
                 Log.d("bugg"," "+ task.exception?.localizedMessage)
                 errorText.visibility = View.VISIBLE
                 errorText.text = "Email address already exists"
             }
+            progressDialog.cancel()
         }
     }
 
     private fun setupEditTexts() {
         password = findViewById(R.id.editTextTextPassword)
-        emailAddress = findViewById(R.id.ddEmailEditText)
-        firstName = findViewById(R.id.firstNameText)
-        lastName = findViewById(R.id.lastNameText)
-        phoneNum = findViewById(R.id.phoneNumEditText)
-        errorText= findViewById(R.id.errorText)
+        emailAddress = findViewById(R.id.emailEditText)
+        confirmPassword = findViewById(R.id.editTextTextPassword2)
+        errorText = findViewById(R.id.errorText)
 
     }
 }
