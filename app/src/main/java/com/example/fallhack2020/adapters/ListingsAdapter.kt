@@ -1,6 +1,7 @@
 package com.example.fallhack2020.adapters
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,22 +9,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fallhack2020.ItemDetailsActivity
 import com.example.fallhack2020.R
+import com.example.fallhack2020.data.Item
 
-class ListingsAdapter : RecyclerView.Adapter<ListingsAdapter.ViewHolder>() {
-    private val descriptions = arrayOf("d116df5",
-        "36ffc75", "f5cfe78", "5b87628",
-        "db8d14e", "9913dc4", "e120f96",
-        "466251b")
+class ListingsAdapter(private val list:List<Item>) : RecyclerView.Adapter<ListingsAdapter.ViewHolder>() {
 
-    private val names = arrayOf("Guitar", "Teknologi",
-        "Keluarga", "Bisnis",
-        "Keluarga", "Hutang",
-        "Teknologi", "Pidana")
-
-    private val prices = arrayOf(17.99,
-        10.00, 15.99, 123.45,
-        9999.99, 1.50, 0.01,
-        200.00)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListingsAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -32,13 +21,14 @@ class ListingsAdapter : RecyclerView.Adapter<ListingsAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ListingsAdapter.ViewHolder, position: Int) {
-        holder.itemName.text = names[position]
-        holder.itemDescription.text = descriptions[position]
-        holder.itemPrice.text = prices[position].toString()
+        holder.itemName.text = list[position].name
+        holder.itemDescription.text = list[position].description
+        holder.itemPrice.text = "$${list[position].price}/month"
+        Log.d("bugg"," I am here")
     }
 
     override fun getItemCount(): Int {
-        return descriptions.size
+        return list.size
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
