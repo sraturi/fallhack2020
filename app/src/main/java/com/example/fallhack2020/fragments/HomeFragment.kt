@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fallhack2020.AddItemActivity
 import com.example.fallhack2020.R
 import com.example.fallhack2020.adapters.ListingsAdapter
 
@@ -28,6 +30,11 @@ class HomeFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             // set the custom adapter to the RecyclerView
             adapter = ListingsAdapter()
+        }
+
+        view.findViewById<Button>(R.id.add_rental).setOnClickListener {
+            val intent = AddItemActivity.createIntent(context)
+            context?.startActivity(intent)
         }
     }
 }
